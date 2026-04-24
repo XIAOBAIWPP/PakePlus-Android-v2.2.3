@@ -1,11 +1,375 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>PakePlus</title>
-    </head>
-    <body>
-        PakePlus
-    </body>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLT征服者电竞</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "微软雅黑", sans-serif;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            background: #0a0a12;
+            background-size: cover;
+            background-position: center;
+            overflow: hidden;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+        }
+
+        .tv-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .poster {
+            width: 98%;
+            height: 96%;
+            max-width: 1920px;
+            max-height: 1080px;
+            background: rgba(17,17,27,0.92);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .content {
+            flex: 1;
+            overflow: hidden;
+            padding: 20px 30px;
+        }
+
+        .content::-webkit-scrollbar { display: none; }
+
+        .fullscreen-tip {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-size: 13px;
+            background: rgba(0,0,0,0.5);
+            padding: 6px 14px;
+            border-radius: 20px;
+            z-index: 999;
+        }
+        :fullscreen .fullscreen-tip { display: none; }
+
+        .watermark {
+            position: fixed;
+            bottom: 10px;
+            right: 15px;
+            font-size: 12px;
+            color: rgba(255,255,255,0.2);
+            pointer-events: none;
+        }
+
+        .red-pack {
+            position: fixed;
+            top: -50px;
+            width: 34px;
+            height: 40px;
+            background: linear-gradient(135deg,#ff3333,#ff6b35);
+            border-radius: 6px;
+            z-index: 1;
+            pointer-events: none;
+            animation: fall linear infinite;
+        }
+        .red-pack::after{
+            content:"¥";
+            color:#fff;
+            font-weight:900;
+            font-size:18px;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            height:100%;
+        }
+        @keyframes fall{
+            0%{ transform: translateY(0) rotate(0deg); opacity:1; }
+            100%{ transform: translateY(100vh) rotate(360deg); opacity:0; }
+        }
+
+        /* ========== 顶部标题缩小优化 ========== */
+        .header {
+            background: linear-gradient(90deg, #ff521e, #ff8a5b, #254edb);
+            padding: 12px 30px; /* 缩小内边距 */
+            text-align: center;
+        }
+        .brand-name {
+            font-size: 26px; /* 缩小店名 */
+            font-weight: 900;
+            color: #fff;
+        }
+        .activity-title {
+            font-size: 20px; /* 缩小活动标题 */
+            color: #fff;
+            margin-top: 4px;
+        }
+        .member-tag {
+            display: inline-block;
+            margin-top: 6px;
+            padding: 4px 10px;
+            background: #ffcc00;
+            color: #000;
+            font-size: 14px;
+            border-radius: 30px;
+        }
+
+        .main-layout {
+            display: flex;
+            flex-direction: row;
+            gap: 25px;
+            height: 100%;
+        }
+
+        .left {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .slogan-top {
+            font-size: 42px;
+            color: #ff6b35;
+            font-weight: 900;
+            text-align: center;
+        }
+        .slogan-main {
+            font-size: 28px;
+            color: #2578ff;
+            text-align: center;
+            margin: 10px 0 25px 0;
+        }
+
+        .tiers {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+        .tier {
+            background: #181828;
+            border: 2px solid #ff772250;
+            border-radius: 14px;
+            padding: 22px 10px;
+            text-align: center;
+        }
+        .tier.best-deal {
+            background: linear-gradient(135deg, #ff521e, #cc3a0c);
+        }
+        .amount {
+            font-size: 22px;
+            color: #eee;
+            margin-bottom: 6px;
+        }
+        .bonus {
+            font-size: 28px;
+            color: #ffcc00;
+            font-weight: 900;
+        }
+        .best-deal .amount,
+        .best-deal .bonus {
+            color: #fff;
+        }
+
+        .right {
+            width: 480px;
+            display: flex;
+            align-items: center;
+        }
+        .rate-section {
+            width: 100%;
+            background: #13131d;
+            padding: 25px;
+            border-radius: 16px;
+        }
+        .rate-title {
+            text-align: center;
+            color: #ff9460;
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .rate-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 17px;
+            color: #eee;
+        }
+        .rate-table th, .rate-table td {
+            padding: 11px 6px;
+            text-align: center;
+            border-bottom: 1px dashed #333;
+        }
+        .rate-table th {
+            color: #ff9460;
+        }
+
+        .room-tip {
+            background: #ff6b3522;
+            border-left: 4px solid #ff6b35;
+            padding: 12px;
+            margin: 20px 0;
+            border-radius: 8px;
+            text-align: center;
+            color: #ffcc00;
+            font-size: 16px;
+        }
+
+        .footer {
+            padding: 12px;
+            text-align: center;
+            color: #ff9460;
+            font-size: 16px;
+            background: #151522;
+        }
+
+        @media screen and (orientation: landscape) {
+            .main-layout {
+                flex-direction: row !important;
+            }
+            .right {
+                width: 480px !important;
+            }
+        }
+
+        @media screen and (orientation: portrait) {
+            .main-layout {
+                flex-direction: column !important;
+            }
+            .right {
+                width: 100% !important;
+            }
+            .brand-name { font-size: 22px; }
+            .slogan-top { font-size: 28px; }
+            .slogan-main { font-size: 20px; }
+            .tiers { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="fullscreen-tip">点击任意位置进入全屏</div>
+    <div class="watermark">Design By Longran</div>
+
+    <div class="tv-container">
+        <div class="poster">
+            <div class="header">
+                <div class="brand-name">BLT 征服者电竞</div>
+                <div class="activity-title">会员充值狂欢活动</div>
+                <div class="member-tag">此次活动为会员专享</div>
+            </div>
+
+            <div class="content">
+                <div class="main-layout">
+                    <div class="left">
+                        <div class="slogan-top">充值即赠</div>
+                        <div class="slogan-main">充多少 送多少</div>
+
+                        <div class="tiers">
+                            <div class="tier">
+                                <div class="amount">充 30 元</div>
+                                <div class="bonus">送 5 元</div>
+                            </div>
+                            <div class="tier">
+                                <div class="amount">充 50 元</div>
+                                <div class="bonus">送 20 元</div>
+                            </div>
+                            <div class="tier best-deal">
+                                <div class="amount">充 100 元</div>
+                                <div class="bonus">送 100 元</div>
+                            </div>
+                            <div class="tier">
+                                <div class="amount">充 200 元</div>
+                                <div class="bonus">送 200 元</div>
+                            </div>
+                            <div class="tier">
+                                <div class="amount">充 300 元</div>
+                                <div class="bonus">送 300 元</div>
+                            </div>
+                            <div class="tier">
+                                <div class="amount">充 500 元</div>
+                                <div class="bonus">送 500 元</div>
+                            </div>
+                        </div>
+
+                        <div class="room-tip">⚠️ 包间价格均为每台单机价格</div>
+                    </div>
+
+                    <div class="right">
+                        <div class="rate-section">
+                            <div class="rate-title">🕒 统一包夜时段：00:00 - 08:00</div>
+                            <table class="rate-table">
+                                <tr><th>区域</th><th>普通单价</th><th>包夜价格</th></tr>
+                                <tr><td>卓威高刷区</td><td>7.8元/小时</td><td>42元</td></tr>
+                                <tr><td>三角洲专区</td><td>7.5元/小时</td><td>39元</td></tr>
+                                <tr><td>双人包间</td><td>9.5元/小时</td><td>37元</td></tr>
+                                <tr><td>三人包间</td><td>9元/小时</td><td>33元</td></tr>
+                                <tr><td>五人包间</td><td>7元/小时</td><td>29元</td></tr>
+                                <tr><td>无烟专区</td><td>6元/小时</td><td>24元</td></tr>
+                                <tr><td>大厅竞技区</td><td>6元/小时</td><td>24元</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer">高端电竞体验 | 会员专属福利 | 畅玩无拘无束</div>
+        </div>
+    </div>
+
+    <script>
+        const bgImages = [
+            "https://playerhub.df.qq.com/playerhub/50b8dd81-8fd5-4c56-a955-937f7dfa57bc.png",
+            "https://playerhub.df.qq.com/playerhub/2d75b806-3378-4053-8bef-1ac762c18913.jpg"
+        ];
+        let last = -1;
+        function changeBg() {
+            let i;
+            do { i = Math.floor(Math.random() * bgImages.length); } while (i === last);
+            last = i;
+            document.body.style.backgroundImage = `url(${bgImages[i]})`;
+        }
+        changeBg();
+        setInterval(changeBg, 60000);
+
+        function createPack() {
+            const p = document.createElement('div');
+            p.className = 'red-pack';
+            p.style.left = Math.random() * 100 + 'vw';
+            let size = Math.random() * 15 + 30;
+            p.style.width = size + 'px';
+            p.style.height = size + 6 + 'px';
+            let speed = Math.random() * 4 + 5;
+            p.style.animationDuration = speed + 's';
+            document.body.appendChild(p);
+            setTimeout(() => p.remove(), speed * 1000);
+        }
+        setInterval(createPack, 250);
+
+        document.body.addEventListener('click', () => {
+            const el = document.documentElement;
+            const fs = document.fullscreenElement || document.webkitFullscreenElement;
+            if (!fs) {
+                (el.requestFullscreen || el.webkitRequestFullscreen).call(el).catch(() => {});
+            } else {
+                (document.exitFullscreen || document.webkitExitFullscreen).call(document).catch(() => {});
+            }
+        });
+    </script>
+</body>
 </html>
